@@ -2,14 +2,25 @@ package com.techafresh.apps.newsly
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.techafresh.apps.newsly.databinding.ActivityMainBinding
+import com.techafresh.apps.newsly.presentation.viewmodel.NewsViewModel
+import com.techafresh.apps.newsly.presentation.viewmodel.NewsViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityMainBinding
+    @Inject
+    lateinit var factory: NewsViewModelFactory
+
+    private lateinit var binding : ActivityMainBinding
+
+    lateinit var newsViewModel: NewsViewModel
 
     lateinit var navHostFragment: NavHostFragment
 
@@ -19,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        newsViewModel = ViewModelProvider(this , factory)[NewsViewModel::class.java]
 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
 
